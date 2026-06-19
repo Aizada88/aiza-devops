@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>312 Coffee shop | Your Neighborhood Coffee Sanctuary</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="#" class="logo">312<span>Coffee shop</span></a>
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#menu">Menu</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+                <div class="menu-btn">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h1 class="reveal">Find Your Perfect <br>Cup of Comfort</h1>
+                <p class="reveal">Experience the finest artisanal coffee in a space designed for relaxation and inspiration.</p>
+                <div class="hero-btns reveal">
+                    <a href="#menu" class="btn btn-primary">Explore Menu</a>
+                    <a href="#contact" class="btn btn-outline">Visit Us</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about section-padding">
+            <div class="container">
+                <div class="about-grid">
+                    <div class="about-img reveal">
+                        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&q=80&w=800" alt="Cozy coffee shop interior">
+                    </div>
+                    <div class="about-text reveal">
+                        <span class="section-subtitle">Our Story</span>
+                        <h2 class="section-title">Roasted with Love, Served with a Smile</h2>
+                        <p>In 312 Coffee shop, we believe coffee is more than just a drink—it's an experience. Founded in 2015, our mission has always been to provide a sanctuary from the bustling city life.</p>
+                        <p>We source our beans ethically from sustainable farms around the globe and roast them in small batches to ensure the highest quality in every cup.</p>
+                        <a href="#contact" class="btn btn-secondary">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Menu Section -->
+        <section id="menu" class="menu section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Freshly Brewed</span>
+                    <h2 class="section-title">Our Signature Menu</h2>
+                </div>
+                <div class="menu-tabs">
+                    <button class="tab-btn active" data-target="coffee">Coffee</button>
+                    <button class="tab-btn" data-target="pastries">Pastries</button>
+                    <button class="tab-btn" data-target="tea">Tea</button>
+                </div>
+                <div class="menu-grid reveal">
+                    <!-- Coffee Items -->
+                    <div class="menu-item" data-category="coffee">
+                        <div class="item-info">
+                            <h3>Caramel Macchiato</h3>
+                            <p>Espresso with steamed milk and caramel drizzle.</p>
+                        </div>
+                        <span class="price">$4.50</span>
+                    </div>
+                    <div class="menu-item" data-category="coffee">
+                        <div class="item-info">
+                            <h3>Flat White</h3>
+                            <p>Double shot of espresso with microfoam.</p>
+                        </div>
+                        <span class="price">$3.75</span>
+                    </div>
+                    <div class="menu-item" data-category="coffee">
+                        <div class="item-info">
+                            <h3>Vanilla Latte</h3>
+                            <p>Rich espresso and silky steamed milk with vanilla.</p>
+                        </div>
+                        <span class="price">$4.25</span>
+                    </div>
+                    <div class="menu-item" data-category="coffee">
+                        <div class="item-info">
+                            <h3>Cold Brew</h3>
+                            <p>Slow-steeped for 18 hours for a smooth finish.</p>
+                        </div>
+                        <span class="price">$4.00</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Customer Reviews Section -->
+        <section id="reviews" class="reviews section-padding">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-subtitle">Testimonials</span>
+                    <h2 class="section-title">What Our Guests Say</h2>
+                </div>
+                <div class="reviews-grid">
+                    <div class="review-card reveal">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"The best atmosphere in the city. Their Oat Milk Latte is simply divine, and the staff is so friendly!"</p>
+                        <div class="reviewer">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=100" alt="Sarah Miller">
+                            <div class="reviewer-info">
+                                <h4>Sarah Miller</h4>
+                                <span>Freelance Designer</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="review-card reveal">
+                        <div class="stars">
+                            <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                        </div>
+                        <p>"I love coming here to write. It's quiet, cozy, and the smell of fresh roasting beans is intoxicating."</p>
+                        <div class="reviewer">
+                            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100" alt="James Wilson">
+                            <div class="reviewer-info">
+                                <h4>James Wilson</h4>
+                                <span>Author</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact section-padding">
+            <div class="container">
+                <div class="contact-grid">
+                    <div class="contact-info reveal">
+                        <span class="section-subtitle">Get In Touch</span>
+                        <h2 class="section-title">Visit Our Shop</h2>
+                        <p>We'd love to see you! Stop by for your morning brew or a late afternoon treat.</p>
+                        <div class="info-list">
+                            <div class="info-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <div>
+                                    <h4>Location</h4>
+                                    <p>123 Coffee Lane, Brewtown, CA 90210</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <div>
+                                    <h4>Hours</h4>
+                                    <p>Mon - Fri: 7am - 8pm<br>Sat - Sun: 8am - 9pm</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="fas fa-phone"></i>
+                                <div>
+                                    <h4>Phone</h4>
+                                    <p>(555) 123-4567</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="contact-form reveal">
+                        <form id="contactForm">
+                            <div class="form-group">
+                                <input type="text" placeholder="Your Name" required>
+                            </div>
+                            <div class="form-group">
+                                <input type="email" placeholder="Your Email" required>
+                            </div>
+                            <div class="form-group">
+                                <textarea rows="5" placeholder="Your Message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="#" class="logo">312<span>Coffee shop</span></a>
+                    <p>Creating moments of joy through exceptional coffee and warm community.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#menu">Menu</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-newsletter">
+                    <h4>Newsletter</h4>
+                    <p>Subscribe to get special offers and news.</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Email Address" required>
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 312 Coffee Shop. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
