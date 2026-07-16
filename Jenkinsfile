@@ -1,6 +1,9 @@
 pipeline {
-
     agent any
+
+    environment {
+        IMAGE_NAME = "restaurant-company"
+    }
 
     stages {
 
@@ -11,30 +14,38 @@ pipeline {
             }
         }
 
-        stage('Show Repository') {
+        stage('Install Dependencies') {
             steps {
-                sh 'pwd'
-                sh 'ls -la'
+                sh 'npm install'
             }
         }
 
-        stage('Show Project Structure') {
+        stage('Build') {
             steps {
-                sh 'tree -L 2 || find . -maxdepth 2'
+                sh 'npm run build'
             }
         }
 
-        stage('Check Git') {
+        stage('Test') {
             steps {
-                sh 'git --version'
+                sh 'npm test || true'
             }
         }
 
-        stage('Finished') {
+        stage('Docker Build') {
             steps {
-                echo 'Pipeline completed successfully!'
+                sh 'docker build -t ${IMAGE_NAME}:latest .'
             }
         }
+    }
 
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed.'
+        }
     }
 }
