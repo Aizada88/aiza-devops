@@ -2,50 +2,55 @@ pipeline {
     agent any
 
     environment {
-        IMAGE_NAME = "restaurant-company"
+        AWS_REGION = 'us-east-2'
+        AWS_ACCOUNT_ID = '2886-7327-5952'
+        ECR_REPOSITORY = 'aiza-devops'
+        IMAGE_NAME = 'aiza-devops'
+        IMAGE_TAG = 'latest'
+
+        PATH="/usr/local/bin:/opt/homebrew/bin:/usr/bin:/bin:${env.PATH}"
     }
 
     stages {
 
-        stage('Checkout') {
+        stage('Checkout Source Code') {
             steps {
-                echo 'Checking out source code...'
                 checkout scm
+            }
+        }
+
+        stage('Verify Tools') {
+            steps {
+                sh '''
+                echo "Node Version"
+                node -v
+
+                echo "NPM Version"
+                npm -v
+
+                echo "Docker Version"
+                docker --version
+
+                echo "AWS CLI Version"
+                aws --version
+                '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'npm install'
+                sh '''
+                npm install
+                '''
             }
         }
 
-        stage('Build') {
+        stage('Build Application') {
             steps {
-                sh 'npm run build'
+                sh '''
+                npm run build
+                '''
             }
         }
 
-        stage('Test') {
-            steps {
-                sh 'npm test || true'
-            }
-        }
 
-        stage('Docker Build') {
-            steps {
-                sh 'docker build -t ${IMAGE_NAME}:latest .'
-            }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
-
-        failure {
-            echo 'Pipeline failed.'
-        }
-    }
-}
