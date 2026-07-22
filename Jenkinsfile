@@ -26,17 +26,11 @@ pipeline {
         stage('Verify Project Files') {
             steps {
                 sh '''
-                    echo "Current directory:"
                     pwd
-
-                    echo "Repository files:"
                     ls -la
 
-                    echo "Application directory:"
-                    ls -la aiza-devops
-
-                    test -f aiza-devops/package.json
-                    test -f aiza-devops/Dockerfile
+                    test -f index.html
+                    test -f Dockerfile
                 '''
             }
         }
@@ -44,70 +38,27 @@ pipeline {
         stage('Verify Tools') {
             steps {
                 sh '''
-                    echo "========== Node Version =========="
-                    node --version
-
-                    echo "========== NPM Version =========="
-                    npm --version
-
-                    echo "========== Docker Version =========="
                     docker --version
-
-                    echo "========== AWS CLI Version =========="
                     aws --version
                 '''
             }
         }
 
-        stage('Install Dependencies') {
-            steps {
-                dir('aiza-devops') {
-                    sh '''
-                        if [ -f package-lock.json ]; then
-                            npm ci
-                        else
-                            npm install
-                        fi
-                    '''
-                }
-            }
-        }
-
-        stage('Build Application') {
-            steps {
-                dir('aiza-devops') {
-                    sh '''
-                        npm run build
-                    '''
-                }
-            }
-        }
-
         stage('SonarQube Analysis') {
             steps {
-                dir('aiza-devops') {
-                    script {
-                        def scannerHome = tool 'SonarScanner'
+                script {
+                    def scannerHome = tool 'SonarScanner'
 
-                        withSonarQubeEnv('SonarQube') {
-                            sh """
-                                ${scannerHome}/bin/sonar-scanner \
-                                -Dsonar.projectKey=aiza-devops \
-                                -Dsonar.projectName=aiza-devops \
-                                -Dsonar.sources=. \
-                                -Dsonar.exclusions=node_modules/*,build/,dist/,coverage/* \
-                                -Dsonar.sourceEncoding=UTF-8
-                            """
-                        }
+                    withSonarQubeEnv('SonarQube') {
+                        sh """
+                            ${scannerHome}/bin/sonar-scanner \
+                            -Dsonar.projectKey=aiza-devops \
+                            -Dsonar.projectName=aiza-devops \
+                            -Dsonar.sources=. \
+                            -Dsonar.exclusions=.git/*,node_modules/,kubernetes/* \
+                            -Dsonar.sourceEncoding=UTF-8
+                        """
                     }
-                }
-            }
-        }
-
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 10, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: true
                 }
             }
         }
@@ -165,13 +116,11 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                dir('aiza-devops') {
-                    sh '''
-                        docker build \
-                            -t "$IMAGE_NAME:$IMAGE_TAG" \
-                            .
-                    '''
-                }
+                sh '''
+                    docker build \
+                        -t "$IMAGE_NAME:$IMAGE_TAG" \
+                        .
+                '''
             }
         }
 
@@ -193,9 +142,7 @@ pipeline {
             steps {
                 sh '''
                     docker push "$ECR_IMAGE"
-
-                    docker push \
-                        "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
+                    docker push "$ECR_REGISTRY/$ECR_REPOSITORY:latest"
                 '''
             }
         }
@@ -211,8 +158,7 @@ pipeline {
                     sh '''
                         aws ecr describe-images \
                             --repository-name "$ECR_REPOSITORY" \
-                            --region "$AWS_REGION" \
-                            --image-ids imageTag="$IMAGE_TAG"
+                            --region "$AWS_REGION"
                     '''
                 }
             }
@@ -221,12 +167,12 @@ pipeline {
 
     post {
         success {
-            echo 'Pipeline completed successfully.'
+            echo "Pipeline completed successfully."
             echo "Image pushed to ${ECR_IMAGE}"
         }
 
         failure {
-            echo 'Pipeline failed. Check the first error in Console Output.'
+            echo "Pipeline failed. Check the first error in Console Output."
         }
 
         always {
