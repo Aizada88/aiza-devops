@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        AWS_REGION    = 'us-east-2'
+        AWS_REGION     = 'us-east-2'
         AWS_ACCOUNT_ID = '288673275952'
 
         ECR_REPOSITORY = 'aiza-devops'
@@ -20,6 +20,24 @@ pipeline {
         stage('Checkout Source Code') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Verify Project Files') {
+            steps {
+                sh '''
+                    echo "Current directory:"
+                    pwd
+
+                    echo "Repository files:"
+                    ls -la
+
+                    echo "Application directory:"
+                    ls -la aiza-devops
+
+                    test -f aiza-devops/package.json
+                    test -f aiza-devops/Dockerfile
+                '''
             }
         }
 
@@ -43,38 +61,44 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh '''
-                    if [ -f package-lock.json ]; then
-                        npm ci
-                    else
-                        npm install
-                    fi
-                '''
+                dir('aiza-devops') {
+                    sh '''
+                        if [ -f package-lock.json ]; then
+                            npm ci
+                        else
+                            npm install
+                        fi
+                    '''
+                }
             }
         }
 
         stage('Build Application') {
             steps {
-                sh '''
-                    npm run build
-                '''
+                dir('aiza-devops') {
+                    sh '''
+                        npm run build
+                    '''
+                }
             }
         }
 
         stage('SonarQube Analysis') {
             steps {
-                script {
-                    def scannerHome = tool 'SonarScanner'
+                dir('aiza-devops') {
+                    script {
+                        def scannerHome = tool 'SonarScanner'
 
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=aiza-devops \
-                            -Dsonar.projectName=aiza-devops \
-                            -Dsonar.sources=. \
-                            -Dsonar.exclusions=node_modules/*,build/,dist/,coverage/* \
-                            -Dsonar.sourceEncoding=UTF-8
-                        """
+                        withSonarQubeEnv('SonarQube') {
+                            sh """
+                                ${scannerHome}/bin/sonar-scanner \
+                                -Dsonar.projectKey=aiza-devops \
+                                -Dsonar.projectName=aiza-devops \
+                                -Dsonar.sources=. \
+                                -Dsonar.exclusions=node_modules/*,build/,dist/,coverage/* \
+                                -Dsonar.sourceEncoding=UTF-8
+                            """
+                        }
                     }
                 }
             }
@@ -82,8 +106,23 @@ pipeline {
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
+                timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
+        stage('Check AWS Credentials') {
+            steps {
+                withCredentials([
+                    [
+                        $class: 'AmazonWebServicesCredentialsBinding',
+                        credentialsId: 'aws-credentials'
+                    ]
+                ]) {
+                    sh '''
+                        aws sts get-caller-identity
+                    '''
                 }
             }
         }
@@ -97,8 +136,6 @@ pipeline {
                     ]
                 ]) {
                     sh '''
-                        aws sts get-caller-identity
-
                         aws ecr describe-repositories \
                             --repository-names "$ECR_REPOSITORY" \
                             --region "$AWS_REGION"
@@ -128,11 +165,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker build \
-                        -t "$IMAGE_NAME:$IMAGE_TAG" \
-                        .
-                '''
+                dir('aiza-devops') {
+                    sh '''
+                        docker build \
+                            -t "$IMAGE_NAME:$IMAGE_TAG" \
+                            .
+                    '''
+                }
             }
         }
 
@@ -161,7 +200,7 @@ pipeline {
             }
         }
 
-        stage('Verify Image') {
+        stage('Verify Image in ECR') {
             steps {
                 withCredentials([
                     [
@@ -183,11 +222,11 @@ pipeline {
     post {
         success {
             echo 'Pipeline completed successfully.'
-            echo "Docker image pushed to: ${ECR_IMAGE}"
+            echo "Image pushed to ${ECR_IMAGE}"
         }
 
         failure {
-            echo 'Pipeline failed. Open Console Output to find the error.'
+            echo 'Pipeline failed. Check the first error in Console Output.'
         }
 
         always {
