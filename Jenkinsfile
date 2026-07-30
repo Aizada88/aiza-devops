@@ -1,6 +1,7 @@
 pipeline {
     agent {
       label 'permAgent'
+    }
     environment {
         AWS_REGION     = 'us-east-2'
         AWS_ACCOUNT_ID = '288673275952'
