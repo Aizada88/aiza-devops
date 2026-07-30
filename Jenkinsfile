@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    permagent
 
     environment {
         AWS_REGION     = 'us-east-2'
