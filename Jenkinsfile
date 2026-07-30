@@ -45,25 +45,6 @@ pipeline {
             }
         }
 
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarScanner'
-
-                    withSonarQubeEnv('SonarQube') {
-                        sh """
-                            ${scannerHome}/bin/sonar-scanner \
-                            -Dsonar.projectKey=aiza-devops \
-                            -Dsonar.projectName=aiza-devops \
-                            -Dsonar.sources=. \
-                            -Dsonar.exclusions=.git/*,node_modules/,kubernetes/* \
-                            -Dsonar.sourceEncoding=UTF-8
-                        """
-                    }
-                }
-            }
-        }
-
         stage('Check AWS Credentials') {
             steps {
                 withCredentials([
